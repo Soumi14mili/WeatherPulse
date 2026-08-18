@@ -4,7 +4,8 @@ export function useKeyboardShortcuts(shortcuts) {
   useEffect(() => {
     const handleKeyDown = (event) => {
       // Check if user is typing in an input field (unless they hit a modifier key)
-      const isInput = ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName) || document.activeElement.isContentEditable;
+      const activeEl = document.activeElement;
+      const isInput = activeEl && (['INPUT', 'TEXTAREA', 'SELECT'].includes(activeEl.tagName) || activeEl.isContentEditable);
       
       for (const shortcut of shortcuts) {
         const keyMatch = event.key.toLowerCase() === shortcut.key.toLowerCase();

@@ -24,7 +24,6 @@ import { arrayMove, SortableContext, sortableKeyboardCoordinates, rectSortingStr
 import { SortableItem } from '../components/common/SortableItem';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import toast from 'react-hot-toast';
-import html2pdf from 'html2pdf.js';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -119,7 +118,7 @@ export default function HomePage() {
 
   const handleDragEnd = (event) => {
     const { active, over } = event;
-    if (active.id !== over.id) {
+    if (over && active.id !== over.id) {
       setWidgetOrder((items) => {
         const oldIndex = items.indexOf(active.id);
         const newIndex = items.indexOf(over.id);
@@ -151,17 +150,24 @@ export default function HomePage() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleExportPDF = () => {
-    const element = document.getElementById('dashboard-content');
-    const opt = {
-      margin: 1,
-      filename: `weather-report-${location.name}.pdf`,
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true },
-      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-    };
-    html2pdf().set(opt).from(element).save();
-    toast.success("PDF Download Started");
+  const handleExportPDF = async () => {
+    try {
+      toast.success("Preparing PDF Download...");
+      const element = document.getElementById('dashboard-content');
+      const opt = {
+        margin: 1,
+        filename: `weather-report-${location.name}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+      };
+      
+      const html2pdf = (await import('html2pdf.js')).default;
+      html2pdf().set(opt).from(element).save();
+    } catch (err) {
+      console.error("PDF Export error:", err);
+      toast.error("Failed to export PDF");
+    }
   };
 
   const widgetsMap = {
@@ -303,10 +309,12 @@ export default function HomePage() {
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
           <SortableContext items={widgetOrder} strategy={rectSortingStrategy}>
             <motion.div variants={itemVariants} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {widgetOrder.map((id) => (
-                <SortableItem key={id} id={id}>
-                  {widgetsMap[id]}
-                </SortableItem>
+              {Array.isArray(widgetOrder) && widgetOrder.map((id) => (
+                widgetsMap[id] ? (
+                  <SortableItem key={id} id={id}>
+                    {widgetsMap[id]}
+                  </SortableItem>
+                ) : null
               ))}
             </motion.div>
           </SortableContext>

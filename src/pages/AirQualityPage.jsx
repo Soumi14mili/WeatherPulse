@@ -5,7 +5,7 @@ import { useWeatherContext } from '../context/WeatherContext';
 import PageWrapper from '../components/layout/PageWrapper';
 import GlassCard from '../components/common/GlassCard';
 import Skeleton from '../components/common/Skeleton';
-import AQIGauge from '../components/common/AQIGauge';
+import AQIGauge from '../components/dashboard/AQIGauge';
 import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { formatTime } from '../utils/formatters';
 
