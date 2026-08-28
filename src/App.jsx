@@ -11,19 +11,49 @@ import MapPage from './pages/MapPage';
 import { useTheme } from './context/ThemeContext';
 import { useWeatherContext } from './context/WeatherContext';
 import WeatherAnimationCanvas from './components/animations/WeatherAnimationCanvas';
+import { getAnimationTypeByCode, AnimationTypes } from './utils/animationEngine';
+
+// Map animation type + day/night → CSS background class
+function getWeatherBgClass(weatherCode, isDay) {
+  if (weatherCode === undefined || weatherCode === null) return 'bg-main-gradient';
+  
+  const type = getAnimationTypeByCode(weatherCode);
+  
+  switch (type) {
+    case AnimationTypes.CLEAR:
+      return isDay ? 'bg-weather-clear-day' : 'bg-weather-clear-night';
+    case AnimationTypes.RAIN:
+      return 'bg-weather-rain';
+    case AnimationTypes.THUNDERSTORM:
+      return 'bg-weather-storm';
+    case AnimationTypes.SNOW:
+      return 'bg-weather-snow';
+    case AnimationTypes.FOG:
+      return 'bg-weather-fog';
+    case AnimationTypes.CLOUDS:
+    case AnimationTypes.WIND:
+      return 'bg-weather-clouds';
+    default:
+      return 'bg-main-gradient';
+  }
+}
 
 function App() {
   const location = useLocation();
   const { isDark } = useTheme();
   const { weatherData } = useWeatherContext();
 
+  const weatherCode = weatherData?.current?.weather_code;
+  const isDay = weatherData?.current?.is_day === 1;
+  const bgClass = getWeatherBgClass(weatherCode, isDay);
+
   return (
     <div className={`min-h-screen transition-colors duration-300 ${isDark ? 'dark' : ''}`}>
-      <div className="min-h-screen bg-main-gradient relative overflow-hidden">
+      <div className={`min-h-screen ${bgClass} relative overflow-hidden`}>
         {weatherData && (
-          <WeatherAnimationCanvas 
-            weatherCode={weatherData.current.weather_code} 
-            isDay={weatherData.current.is_day === 1} 
+          <WeatherAnimationCanvas
+            weatherCode={weatherData.current.weather_code}
+            isDay={weatherData.current.is_day === 1}
           />
         )}
         <Navbar />

@@ -1,4 +1,4 @@
-/* WeatherPulse Weather Animations Styles */
+/* WeatherPulse Weather Animations Styles v2.0 */
 
 .weather-animation-container {
   position: fixed;
@@ -9,7 +9,8 @@
   z-index: 0;
   pointer-events: none;
   overflow: hidden;
-  transition: opacity 0.8s ease-in-out;
+  /* Smooth crossfade when weather type changes */
+  transition: opacity 1.2s ease-in-out;
 }
 
 .weather-animation-canvas {
@@ -21,12 +22,43 @@
   pointer-events: none;
 }
 
-/* Add custom animations/transitions if needed */
+/* Fade in on mount */
 .weather-fade-in {
-  animation: weatherFadeIn 1s forwards;
+  animation: weatherFadeIn 1.5s ease-out forwards;
 }
 
 @keyframes weatherFadeIn {
   from { opacity: 0; }
-  to { opacity: 1; }
+  to   { opacity: 1; }
+}
+
+/* Lightning screen flash overlay (applied via JS class toggle) */
+.lightning-flash {
+  animation: lightningFlashAnim 0.15s ease-out forwards;
+}
+
+@keyframes lightningFlashAnim {
+  0%   { opacity: 0.7; }
+  50%  { opacity: 0.3; }
+  100% { opacity: 0; }
+}
+
+/* Rain surface splash rings (CSS-only variant, canvas handles the main ones) */
+.rain-splash {
+  animation: rainSplashAnim 0.4s ease-out forwards;
+}
+
+@keyframes rainSplashAnim {
+  from { transform: scale(0);   opacity: 0.6; }
+  to   { transform: scale(1.4); opacity: 0;   }
+}
+
+/* Fog drift layer */
+.fog-layer {
+  animation: fogDrift 18s linear infinite;
+}
+
+@keyframes fogDrift {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-120px); }
 }
