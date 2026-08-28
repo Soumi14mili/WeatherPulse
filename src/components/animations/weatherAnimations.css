@@ -1,0 +1,32 @@
+/* WeatherPulse Weather Animations Styles */
+
+.weather-animation-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  transition: opacity 0.8s ease-in-out;
+}
+
+.weather-animation-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Add custom animations/transitions if needed */
+.weather-fade-in {
+  animation: weatherFadeIn 1s forwards;
+}
+
+@keyframes weatherFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

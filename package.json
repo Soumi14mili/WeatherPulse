@@ -14,12 +14,11 @@
     "@dnd-kit/utilities": "^3.2.2",
     "framer-motion": "^12.12.2",
     "html2pdf.js": "^0.10.2",
-    "leaflet": "^1.9.4",
+    "@googlemaps/js-api-loader": "^1.16.8",
     "lucide-react": "^0.511.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-hot-toast": "^2.5.2",
-    "react-leaflet": "^5.0.0",
     "react-router-dom": "^7.6.2",
     "recharts": "^3.0.0"
   },

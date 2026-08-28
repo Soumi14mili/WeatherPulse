@@ -9,16 +9,25 @@ import HealthAdvisorPage from './pages/HealthAdvisorPage';
 import AnalyticsPage from './pages/AnalyticsPage';
 import MapPage from './pages/MapPage';
 import { useTheme } from './context/ThemeContext';
+import { useWeatherContext } from './context/WeatherContext';
+import WeatherAnimationCanvas from './components/animations/WeatherAnimationCanvas';
 
 function App() {
   const location = useLocation();
   const { isDark } = useTheme();
+  const { weatherData } = useWeatherContext();
 
   return (
     <div className={`min-h-screen transition-colors duration-300 ${isDark ? 'dark' : ''}`}>
-      <div className="min-h-screen bg-main-gradient">
+      <div className="min-h-screen bg-main-gradient relative overflow-hidden">
+        {weatherData && (
+          <WeatherAnimationCanvas 
+            weatherCode={weatherData.current.weather_code} 
+            isDay={weatherData.current.is_day === 1} 
+          />
+        )}
         <Navbar />
-        <main className="pt-20 pb-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <main className="pt-20 pb-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative z-10">
           <AnimatePresence mode="wait">
             <Routes location={location} key={location.pathname}>
               <Route path="/" element={<HomePage />} />
